@@ -1,61 +1,49 @@
+'''
+Generates M2 script to compute the defining ideal of a sample graph-constrained secant variety.
+'''
+
 import argparse
 import os
 
-from _generators.generator_flattening import ConstrainedSecantGenerator as flattening_generator
-from _generators.generator_slicing import ConstrainedSecantGenerator as slicing_generator
-from _generators.generator_strassen import ConstrainedSecantGenerator as strassen_generator
-from _generators.generator_full import ConstrainedSecantGenerator as full_generator
 
-# Target 1: 3x3x3 Tensor, Rank 3
-# Causal Constraint: Node 1 does not directly influence Node 3 via two latent paths.
-constraints = [
-    (2, 0, 1), # Mode 2, Row 0, Col 1 is zero
-    (2, 1, 2)  # Mode 2, Row 1, Col 2 is zero
-]
-
-shape = [3, 3, 3]
-rank = 3
-field="ZZ/32003" 
+def parse_constraints(c_str):
+    if not c_str:
+        return []
+    constraints = []
+    for item in c_str.split(';'):
+        parts = item.split(',')
+        if len(parts) == 3:
+            constraints.append(tuple(map(int, parts)))
+    return constraints
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Generate Macaulay2 script for constrained secant variety.")
-    parser.add_argument("--g", type=str, default="slicing", choices=["full", "slicing", "strassen"])
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="Compile M2 scripts for constrained secant varieties.")
+    parser.add_argument('--type', type=str, required=True, choices=['flattening', 'full', 'slicing', 'strassen'], help="Which algebraic shortcut to use.")
+    parser.add_argument('--field', type=str, default="ZZ/32003", help="Base field for computations (default: finite field of size 32003)")
+    parser.add_argument('--shape', type=str, required=True, help="Tensor dimensions, e.g., '3,3,3'")
+    parser.add_argument('--rank', type=int, required=True, help="CP Rank")
+    parser.add_argument('--constraints', type=str, default="", help="Zeroed paths, e.g., '2,0,0;2,1,2'")
+    parser.add_argument('--out', type=str, required=True, help="Output filename (saved in src/M2/)")
+    
     args = parser.parse_args()
     
-    if args.g == "full":
-        gen = full_generator(
-            shape=shape, 
-            rank=rank, 
-            constraints=constraints, 
-            field=field
-        )
-        gen.export("target1_full.m2")
-    elif args.g == "slicing":
-        gen = slicing_generator(
-            shape=shape, 
-            rank=rank, 
-            constraints=constraints, 
-            field=field,
-            slice_minor_size=3
-        )
-        gen.export("target1_slicing.m2")
-    elif args.g == "strassen":
-        gen = strassen_generator(
-            shape=shape, 
-            rank=rank, 
-            constraints=constraints, 
-            field=field
-        )
-        gen.export("target1_strassen.m2")
-    elif args.g == "flattening":
-        gen = flattening_generator(
-            shape=shape, 
-            rank=rank, 
-            constraints=constraints, 
-            field=field
-        )
-        gen.export("target1_flattening.m2")
-    else:
-        print("Invalid generator choice. Use --g with one of: full, slicing, strassen, flattening.")
-        os.exit(1)
+    shape = list(map(int, args.shape.split(',')))
+    constraints = parse_constraints(args.constraints)
+    
+    if args.type == 'flattening':
+        from _generators.generator_flattening import ConstrainedSecantGenerator
+    elif args.type == 'full':
+        from _generators.generator_full import ConstrainedSecantGenerator
+    elif args.type == 'slicing':
+        from _generators.generator_slicing import ConstrainedSecantGenerator
+    elif args.type == 'strassen':
+        from _generators.generator_strassen import ConstrainedSecantGenerator
+        
+    gen = ConstrainedSecantGenerator(shape=shape, rank=args.rank, constraints=constraints, field=args.field)
+    
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    out_path = os.path.join(base_dir, 'M2', args.out)
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    
+    gen.export(out_path)

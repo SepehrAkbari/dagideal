@@ -1,7 +1,7 @@
 '''
 Generates M2 script to compute the defining ideal of a graph-constrained secant variety.
 
-This version includes the full set of generators for the ideal, without any simplification or pruning. It is intended for small examples where the number of generators is manageable.
+Includes the full set of generators for the ideal, without any simplification or pruning. It is intended for small examples where the number of generators is manageable.
 '''
 
 import itertools

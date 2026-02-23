@@ -1,7 +1,7 @@
 '''
 Generates M2 script to compute the defining ideal of a graph-constrained secant variety.
 
-This generalized slicing version extracts all possible 2D matrix slices from an N-way tensor by fixing N-2 modes, and injects their minors into the ideal.
+Extracts all possible 2D matrix slices from an N-way tensor by fixing N-2 modes, and injects their minors into the ideal.
 '''
 
 import itertools

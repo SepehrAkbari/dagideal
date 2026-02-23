@@ -1,7 +1,7 @@
 '''
 Generates M2 script to compute the defining ideal of a graph-constrained secant variety.
 
-This version focuses on generating the ideal using the flattening approach, which can be more efficient for larger examples. It constructs the principal tensor flattenings and derives the ideal from the rank conditions on these flattenings, while respecting the specified constraints.
+Constructs the principal tensor flattenings and derives the ideal from the rank conditions on these flattenings, while respecting the specified constraints.
 '''
 
 import itertools

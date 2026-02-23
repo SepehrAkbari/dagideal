@@ -1,1 +1,5 @@
 .vscode
+desc.md
+tests.md
+dir_arch.md
+__pycache__

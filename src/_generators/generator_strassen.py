@@ -1,7 +1,7 @@
 '''
 Generates M2 script to compute the defining ideal of a graph-constrained secant variety.
 
-This version uses Strassen's Equations (degree-4 invariants) as a computational shortcut.
+Uses Strassen's Equations (degree-4 invariants) as a computational shortcut.
 '''
 
 import itertools
@@ -37,12 +37,12 @@ class ConstrainedSecantGenerator:
                 rows.append("{" + ", ".join(col_vars) + "}")
             m2_code += f"X_{i} = matrix{{\n    " + ",\n    ".join(rows) + "\n}\n"
             slices.append(f"X_{i}")
-
+        
         m2_code += "\n-- Helper function for the 3x3 Adjugate\n"
         m2_code += "adj = M -> matrix {\n"
-        m2_code += "    { det submatrix(M,{1,2},{1,2}), -det submatrix(M,{1,2},{0,2}),  det submatrix(M,{1,2},{0,1}) },\n"
-        m2_code += "    {-det submatrix(M,{0,2},{1,2}),  det submatrix(M,{0,2},{0,2}), -det submatrix(M,{0,2},{0,1}) },\n"
-        m2_code += "    { det submatrix(M,{0,1},{1,2}), -det submatrix(M,{0,1},{0,2}),  det submatrix(M,{0,1},{0,1}) }\n"
+        m2_code += "    { det submatrix(M,{1,2},{1,2}), -det submatrix(M,{0,2},{1,2}),  det submatrix(M,{0,1},{1,2}) },\n"
+        m2_code += "    {-det submatrix(M,{1,2},{0,2}),  det submatrix(M,{0,2},{0,2}), -det submatrix(M,{0,1},{0,2}) },\n"
+        m2_code += "    { det submatrix(M,{1,2},{0,1}), -det submatrix(M,{0,2},{0,1}),  det submatrix(M,{0,1},{0,1}) }\n"
         m2_code += "}\n\n"
 
         m2_code += "-- Computing the Strassen Matrix: X0*adj(X1)*X2 - X2*adj(X1)*X0\n"
