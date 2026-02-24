@@ -19,7 +19,7 @@ def parse_constraints(c_str):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Compile M2 scripts for constrained secant varieties.")
-    parser.add_argument('--type', type=str, required=True, choices=['flattening', 'full', 'slicing', 'strassen'], help="Which algebraic shortcut to use.")
+    parser.add_argument('--type', type=str, required=True, choices=['flattening', 'full', 'slicing', 'strassen', 'terracini'], help="Which algebraic shortcut to use.")
     parser.add_argument('--field', type=str, default="ZZ/32003", help="Base field for computations (default: finite field of size 32003)")
     parser.add_argument('--shape', type=str, required=True, help="Tensor dimensions, e.g., '3,3,3'")
     parser.add_argument('--rank', type=int, required=True, help="CP Rank")
@@ -39,6 +39,8 @@ if __name__ == '__main__':
         from _generators.generator_slicing import ConstrainedSecantGenerator
     elif args.type == 'strassen':
         from _generators.generator_strassen import ConstrainedSecantGenerator
+    elif args.type == 'terracini':
+        from _generators.generator_terracini import ConstrainedSecantGenerator
         
     gen = ConstrainedSecantGenerator(shape=shape, rank=args.rank, constraints=constraints, field=args.field)
     

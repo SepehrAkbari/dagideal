@@ -9,7 +9,7 @@ import itertools
 
 class ConstrainedSecantGenerator:
     
-    def __init__(self, shape, rank, constraints=None, field="ZZ/32003"):
+    def __init__(self, shape, rank, constraints=None, field="QQ"):
         self.shape = shape
         self.rank = rank
         self.constraints = set(constraints) if constraints else set()
