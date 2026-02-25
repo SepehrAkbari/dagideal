@@ -7,11 +7,11 @@ import subprocess
 
 
 def gen_test(gen_type, shape, rank, constraints, m2_filename, field="ZZ/32003"):
-    m2_filepath = os.path.join("..", "M2", m2_filename)
+    m2_filepath = os.path.join("M2", m2_filename)
     os.makedirs(os.path.dirname(m2_filepath), exist_ok=True)
     
     cmd = [
-        "python3", os.path.join("..", "generate.py"),
+        "python3", os.path.join("generate.py"),
         "--type", gen_type,
         "--field", field,
         "--shape", shape,
@@ -21,7 +21,6 @@ def gen_test(gen_type, shape, rank, constraints, m2_filename, field="ZZ/32003"):
     ]
     
     subprocess.run(cmd, check=True)
-    print(f"Generated {m2_filename} using {gen_type} generator.")
     
 
 if __name__ == "__main__":

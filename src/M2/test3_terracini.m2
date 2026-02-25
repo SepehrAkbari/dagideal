@@ -12,12 +12,12 @@ J = jacobian F
 
 -- Evaluate the Jacobian at a random numerical point
 randomVals = apply(gens R, v -> v => random kk)
-J_eval = sub(J, randomVals)
+Jeval = sub(J, randomVals)
 
-print "--- Geometric Identifiability Report ---"
+print "--- Geometric Identifiability"
 print "Total Free Parameters (Vertices): 32"
 print "Scaling Redundancies: 6"
 print "Expected Dimension (if identifiable): 26"
 print ""
 print "Actual Dimension of Constrained Variety (Jacobian Rank):"
-print rank J_eval
+print rank Jeval

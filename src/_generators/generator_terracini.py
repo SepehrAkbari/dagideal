@@ -54,19 +54,19 @@ class ConstrainedSecantGenerator:
 
         m2_code += "-- Evaluate the Jacobian at a random numerical point\n"
         m2_code += "randomVals = apply(gens R, v -> v => random kk)\n"
-        m2_code += "J_eval = sub(J, randomVals)\n\n"
+        m2_code += "Jeval = sub(J, randomVals)\n\n"
 
         num_params = len(factor_vars)
         scaling_redundancies = self.rank * (len(self.shape) - 1)
         expected_dim = num_params - scaling_redundancies
 
-        m2_code += f"print \"--- Geometric Identifiability Report ---\"\n"
+        m2_code += f"print \"--- Geometric Identifiability\"\n"
         m2_code += f"print \"Total Free Parameters (Vertices): {num_params}\"\n"
         m2_code += f"print \"Scaling Redundancies: {scaling_redundancies}\"\n"
         m2_code += f"print \"Expected Dimension (if identifiable): {expected_dim}\"\n"
         m2_code += f"print \"\"\n"
         m2_code += f"print \"Actual Dimension of Constrained Variety (Jacobian Rank):\"\n"
-        m2_code += f"print rank J_eval\n"
+        m2_code += f"print rank Jeval\n"
 
         return m2_code
 
